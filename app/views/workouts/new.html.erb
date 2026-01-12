@@ -1,0 +1,60 @@
+<section class="section">
+  <div class="container">
+    <h1 class="title">Workout: <%= @routine.name %></h1>
+    <h2 class="subtitle"><%= @routine_day.day_of_week.capitalize %> Session</h2>
+
+    <%= form_with scope: :session, url: workouts_path do |f| %>
+      <%= f.hidden_field :routine_id, value: @routine.id %>
+
+      <div class="columns is-multiline">
+        <% @exercises.each do |re| %>
+          <div class="column is-12">
+            <div class="box">
+              <div class="columns is-vcentered">
+                <div class="column">
+                  <h3 class="title is-5 mb-1"><%= re.exercise.name %></h3>
+                  <p class="is-size-7 has-text-grey">
+                    Target: <%= re.target_sets %> sets x <%= re.target_reps %> reps
+                  </p>
+                  <% last_session = Current.user.sessions.joins(:session_exercises).where(routine: @routine, session_exercises: { exercise_id: re.exercise_id }).order(completed_at: :desc).first %>
+                  <% if last_session %>
+                    <% last_ex = last_session.session_exercises.find_by(exercise_id: re.exercise_id) %>
+                    <p class="is-size-7 has-text-info">
+                      Last time: <%= last_ex.sets %> sets x <%= last_ex.reps %> reps<% if last_ex.weight.present? %> @ <%= last_ex.weight %> kg<% end %>
+                    </p>
+                  <% end %>
+                </div>
+                <div class="column is-narrow">
+                  <div class="field is-grouped">
+                    <div class="control">
+                      <label class="label is-small">Sets</label>
+                      <%= number_field_tag "exercises[#{re.exercise_id}][sets]", re.target_sets, class: "input is-small", style: "width: 60px;" %>
+                    </div>
+                    <div class="control">
+                      <label class="label is-small">Reps</label>
+                      <%= number_field_tag "exercises[#{re.exercise_id}][reps]", re.target_reps, class: "input is-small", style: "width: 60px;" %>
+                    </div>
+                    <div class="control">
+                      <label class="label is-small">Weight (kg)</label>
+                      <% last_weight = Current.user.sessions.joins(:session_exercises).where(routine: @routine, session_exercises: { exercise_id: re.exercise_id }).order(completed_at: :desc).first&.session_exercises&.find_by(exercise_id: re.exercise_id)&.weight %>
+                      <%= number_field_tag "exercises[#{re.exercise_id}][weight]", last_weight, class: "input is-small", style: "width: 80px;", step: "0.5", placeholder: "0" %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="field mt-5">
+        <div class="control">
+          <%= f.submit "Finish Workout", class: "button is-primary is-large is-fullwidth" %>
+        </div>
+      </div>
+      <div class="has-text-centered">
+        <%= link_to "Cancel", root_path, class: "button is-light mt-2" %>
+      </div>
+    <% end %>
+  </div>
+</section>

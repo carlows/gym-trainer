@@ -1,0 +1,35 @@
+<section class="section">
+  <div class="container" data-controller="chat-loading">
+    <div class="box" style="height: 70vh; display: flex; flex-direction: column;">
+      <div class="level mb-4">
+        <div class="level-left">
+          <h2 class="title is-4">Training Assistant</h2>
+        </div>
+      </div>
+      
+      <div id="chat_messages" class="mb-4 pr-2" style="flex-grow: 1; overflow-y: auto;" data-controller="chat-scroll">
+        <%= turbo_stream_from [Current.user, :chat] %>
+        <div id="messages_container">
+          <%= render @messages %>
+        </div>
+        <div id="loading_indicator" class="message is-dark mb-2 is-hidden" style="max-width: 80%; align-self: flex-start;" data-chat-loading-target="indicator">
+          <div class="message-body py-2 px-3">
+            <strong>Assistant:</strong>
+            <span class="is-italic has-text-grey">Thinking...</span>
+          </div>
+        </div>
+      </div>
+
+      <%= form_with url: chat_path, data: { controller: "reset-form", action: "turbo:submit-start->chat-loading#submit turbo:submit-end->reset-form#reset turbo:submit-end->chat-loading#responseReceived" }, class: "is-flex-grow-0" do |f| %>
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <%= f.text_field :content, class: "input", placeholder: "Ask me to create a routine (e.g. 'Create a Push/Pull/Legs routine for Mon, Wed, Fri')", autofocus: true, autocomplete: "off" %>
+          </div>
+          <div class="control">
+            <%= f.submit "Send", class: "button is-primary", data: { chat_loading_target: "submitButton" } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,6 @@
+<div id="<%= dom_id(chat_message) %>" class="message <%= chat_message.role == 'user' ? 'is-info' : 'is-dark' %> mb-2" style="max-width: 80%; <%= chat_message.role == 'user' ? 'align-self: flex-end; margin-left: auto;' : 'align-self: flex-start;' %>">
+  <div class="message-body py-2 px-3">
+    <strong><%= chat_message.role.capitalize %>:</strong>
+    <%= chat_message.content %>
+  </div>
+</div>

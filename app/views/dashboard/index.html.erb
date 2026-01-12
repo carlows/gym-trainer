@@ -1,0 +1,78 @@
+<section class="section">
+  <div class="container">
+    <div class="level">
+      <div class="level-left">
+        <h1 class="title">My Routines</h1>
+      </div>
+      <div class="level-right">
+        <%= link_to chat_path, class: "button is-primary" do %>
+          <span class="icon"><i class="lucide-message-square"></i></span>
+          <span>Talk to Assistant</span>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="columns is-multiline">
+      <% if @routines.any? %>
+        <% @routines.each do |routine| %>
+          <div class="column is-4">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  <%= routine.name %>
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="content">
+                  <p><strong>Days:</strong> <%= routine.routine_days.pluck(:day_of_week).map(&:capitalize).join(", ") %></p>
+                  <p><strong>Exercises:</strong> <%= routine.routine_days.sum { |rd| rd.routine_exercises.count } %></p>
+                </div>
+              </div>
+              <footer class="card-footer">
+                <%= link_to "Start Workout", new_workout_path(routine_id: routine.id), class: "card-footer-item has-text-primary" %>
+              </footer>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="column is-12">
+          <div class="notification is-light">
+            You don't have any routines yet. Talk to the assistant to create one!
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <hr>
+
+    <h2 class="title is-4">Recent Sessions</h2>
+    <div class="table-container">
+      <table class="table is-fullwidth is-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Routine</th>
+            <th>Exercises</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if @sessions.any? %>
+            <% @sessions.each do |session| %>
+              <tr>
+                <td><%= session.completed_at.strftime("%b %d, %Y") %></td>
+                <td><%= session.routine.name %></td>
+                <td><%= session.session_exercises.count %></td>
+                <td><%= link_to "View", workout_path(session) %></td>
+              </tr>
+            <% end %>
+          <% else %>
+            <tr>
+              <td colspan="4" class="has-text-centered">No sessions recorded yet.</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

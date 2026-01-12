@@ -1,0 +1,36 @@
+<section class="section">
+  <div class="container">
+    <div class="level">
+      <div class="level-left">
+        <div>
+          <h1 class="title">Workout Summary</h1>
+          <h2 class="subtitle"><%= @session.routine.name %> - <%= @session.completed_at.strftime("%B %d, %Y at %H:%M") %></h2>
+        </div>
+      </div>
+      <div class="level-right">
+        <%= link_to "Back to Dashboard", root_path, class: "button is-light" %>
+      </div>
+    </div>
+
+    <div class="box">
+      <table class="table is-fullwidth is-striped">
+        <thead>
+          <tr>
+            <th>Exercise</th>
+            <th>Performance</th>
+            <th>Weight</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @session.session_exercises.each do |se| %>
+            <tr>
+              <td><strong><%= se.exercise.name %></strong></td>
+              <td><%= se.sets %> sets x <%= se.reps %> reps</td>
+              <td><%= se.weight.present? ? "#{se.weight} kg" : "-" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
