@@ -5,6 +5,7 @@ class SessionsController < ApplicationController
   end
 
   def create
+    send_message
     user = User.find_or_create_by(identifier: params[:identifier].to_s.strip.downcase)
     if user.persisted?
       cookies.signed[:user_id] = { value: user.id, expires: 1.month.from_now }
@@ -18,5 +19,11 @@ class SessionsController < ApplicationController
   def destroy
     cookies.delete(:user_id)
     redirect_to new_session_path, notice: "Logged out"
+  end
+
+  private
+
+  def send_message
+    Sentry.capture_message("Hello Better Stack, this is a test message from Ruby!")
   end
 end
