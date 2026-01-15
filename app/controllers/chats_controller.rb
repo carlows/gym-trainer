@@ -7,7 +7,6 @@ class ChatsController < ApplicationController
   def create
     @chat = Current.user.chat || Current.user.create_chat!(model: "gemini-2.5-flash", provider: "vertexai")
 
-    # We use RubyLLM's ask method which handles persistence automatically
     @chat.with_instructions(system_prompt)
       .with_tools(
         CreateRoutineTool,
@@ -38,8 +37,6 @@ class ChatsController < ApplicationController
 
       CRITICAL: Before adding an exercise, ALWAYS search for it first using `search_exercise` to get the correct ID.
       CRITICAL: When a user wants to EDIT or DELETE/ARCHIVE something, use `list_user_routines` first to find the correct IDs (Routine ID, Day ID, or RoutineExercise ID).
-
-      The days of the week are: monday, tuesday, wednesday, thursday, friday, saturday, sunday.
 
       When the user says something like "Create a Push/Pull/Legs routine on Mon, Wed, Fri", you should:
       1. Create the routine.
