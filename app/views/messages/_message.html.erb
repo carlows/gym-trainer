@@ -1,8 +1,18 @@
-<% if message.content.present? || message.role == 'user' %>
-<div id="<%= dom_id(message) %>" class="message <%= message.role == 'user' ? 'is-info' : 'is-dark' %> mb-2" style="max-width: 80%; <%= message.role == 'user' ? 'align-self: flex-end; margin-left: auto;' : 'align-self: flex-start;' %>">
-  <div class="message-body py-2 px-3">
-    <strong><%= message.role.capitalize %>:</strong>
-    <%= message.content %>
+<% if message.content.present? || message.role == 'user' || message.entities.any? %>
+  <div id="<%= dom_id(message) %>" 
+       class="message <%= message.role == 'user' ? 'is-info' : 'is-dark' %> mb-2" 
+       style="max-width: 80%; <%= message.role == 'user' ? 'align-self: flex-end; margin-left: auto;' : 'align-self: flex-start;' %>">
+    <div class="message-body py-2 px-3">
+      <strong><%= message.role.capitalize %>:</strong>
+      <div class="content">
+        <%= simple_format(message.content) %>
+      </div>
+      
+      <% if message.entities.any? %>
+        <div class="entities-container mt-2">
+          <%= render message.entities %>
+        </div>
+      <% end %>
+    </div>
   </div>
-</div>
 <% end %>

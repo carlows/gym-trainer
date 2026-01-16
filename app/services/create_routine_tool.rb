@@ -5,6 +5,9 @@ class CreateRoutineTool < RubyLLM::Tool
   def execute(name:)
     user = Current.user
     routine = user.routines.create!(name: name)
-    "Routine '#{name}' created with ID #{routine.id}."
+    {
+      content: "Routine '#{name}' created with ID #{routine.id}.",
+      metadata: { type: "routine_created", ids: [ routine.id ] }
+    }
   end
 end

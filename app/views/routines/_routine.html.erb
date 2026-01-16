@@ -1,0 +1,31 @@
+<div class="card mb-3 shadow-sm">
+  <header class="card-header has-background-light">
+    <p class="card-header-title">
+      <span class="icon mr-2">
+        <%= lucide_icon('dumbbell', size: 18) %>
+      </span>
+      <%= routine.name %>
+    </p>
+    <% if routine.archived? %>
+      <span class="tag is-warning m-2">Archived</span>
+    <% end %>
+  </header>
+  
+  <div class="card-content py-3">
+    <div class="content">
+      <% if routine.routine_days.any? %>
+        <div class="tags mb-2">
+          <% routine.routine_days.order(:day_of_week).each do |day| %>
+            <span class="tag is-info is-light"><%= day.day_of_week.capitalize %></span>
+          <% end %>
+        </div>
+        
+        <p class="is-size-7 has-text-grey">
+          <%= pluralize(routine.routine_days.sum { |d| d.routine_exercises.count }, 'exercise') %> total
+        </p>
+      <% else %>
+        <p class="is-italic has-text-grey-light is-size-7">No days scheduled yet.</p>
+      <% end %>
+    </div>
+  </div>
+</div>

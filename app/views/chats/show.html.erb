@@ -9,7 +9,7 @@
       
       <div id="chat_messages" class="mb-4 pr-2" style="flex-grow: 1; overflow-y: auto;" data-controller="chat-scroll">
         <%= turbo_stream_from [Current.user, :chat] %>
-        <div id="messages_container">
+        <div id="messages_container" style="display: flex; flex-direction: column;">
           <%= render @messages %>
         </div>
         <div id="loading_indicator" class="message is-dark mb-2 is-hidden" style="max-width: 80%; align-self: flex-start;" data-chat-loading-target="indicator">
