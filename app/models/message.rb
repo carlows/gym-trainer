@@ -22,6 +22,18 @@ class Message < ApplicationRecord
 
   def broadcast_to_user
     return if role == "system"
-    broadcast_append_to [ chat.user, :chat ], target: "messages_container"
+
+    # Broadcast JSON for VueJS instead of Turbo Streams
+    ActionCable.server.broadcast(
+      "chat_#{chat.user.id}",
+      {
+        id: id,
+        role: role,
+        content: content,
+        content_raw: content_raw,
+        created_at: created_at,
+        metadata: content_raw.is_a?(Hash) ? content_raw["metadata"] : nil
+      }
+    )
   end
 end

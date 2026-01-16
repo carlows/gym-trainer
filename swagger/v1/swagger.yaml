@@ -1,0 +1,301 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-User-Identifier
+      in: header
+paths:
+  "/api/v1/chat":
+    get:
+      summary: show chat
+      tags:
+      - Chat
+      security:
+      - apiKey: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chat:
+                    type: object
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        role:
+                          type: string
+                        content:
+                          type: string
+                        entities:
+                          type: array
+    post:
+      summary: create message
+      tags:
+      - Chat
+      security:
+      - apiKey: []
+      parameters: []
+      responses:
+        '200':
+          description: processing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+              - content
+  "/api/v1/exercises":
+    get:
+      summary: list exercises
+      tags:
+      - Exercises
+      parameters:
+      - name: q
+        in: query
+        description: Search by name
+        schema:
+          type: string
+      - name: body_part
+        in: query
+        description: Filter by body part
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    body_part:
+                      type: string
+                    equipment:
+                      type: string
+  "/api/v1/exercises/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show exercise
+      tags:
+      - Exercises
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+  "/api/v1/routines":
+    get:
+      summary: list routines
+      tags:
+      - Routines
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    routine_days:
+                      type: array
+  "/api/v1/routines/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: id
+      required: true
+      schema:
+        type: string
+    get:
+      summary: show routine
+      tags:
+      - Routines
+      security:
+      - apiKey: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+  "/api/v1/session":
+    get:
+      summary: show session
+      tags:
+      - Sessions
+      security:
+      - apiKey: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      identifier:
+                        type: string
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    post:
+      summary: create session
+      tags:
+      - Sessions
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      identifier:
+                        type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                identifier:
+                  type: string
+              required:
+              - identifier
+  "/api/v1/workouts":
+    get:
+      summary: list workout sessions
+      tags:
+      - Workouts
+      security:
+      - apiKey: []
+      responses:
+        '200':
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    completed_at:
+                      type: string
+                      format: date-time
+                    session_exercises:
+                      type: array
+    post:
+      summary: log workout session
+      tags:
+      - Workouts
+      security:
+      - apiKey: []
+      parameters: []
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                routine_id:
+                  type: integer
+                exercises:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      exercise_id:
+                        type: integer
+                      sets:
+                        type: integer
+                      reps:
+                        type: integer
+              required:
+              - routine_id
+              - exercises
+servers:
+- url: http://localhost:3000
+  description: Local Development Server

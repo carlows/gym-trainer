@@ -45,9 +45,13 @@ gem "thruster", require: false
 gem "ruby_llm"
 gem "lucide-rails"
 gem "googleauth"
+gem "rack-cors"
+gem "rswag-api"
+gem "rswag-ui"
 
 group :development, :test do
   gem "rspec-rails"
+  gem "rswag-specs"
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
