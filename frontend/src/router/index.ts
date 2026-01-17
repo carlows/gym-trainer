@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardView from '@/views/DashboardView.vue'
+import { useAuth } from '@/composables/useAuth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,18 @@ const router = createRouter({
       component: () => import('@/views/ChatView.vue'),
     },
   ],
+})
+
+router.beforeEach((to) => {
+  const { isAuthenticated } = useAuth()
+
+  if (!isAuthenticated.value && to.name !== 'login') {
+    return { name: 'login' }
+  }
+
+  if (isAuthenticated.value && to.name === 'login') {
+    return { name: 'dashboard' }
+  }
 })
 
 export default router

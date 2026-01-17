@@ -22,12 +22,12 @@ const handleLogin = () => {
       <h2 class="text-lg font-semibold tracking-tight">Gym Trainer</h2>
       <p>"No pain no gain."</p>
     </div>
-    <div class="flex flex-col justify-center items-center flex-1 bg-background">
-      <div class="max-w-lg">
+    <div class="flex justify-center items-center flex-1 bg-background p-10">
+      <div class="w-sm flex flex-col gap-4 text-center">
         <h2 class="font-bold text-xl">Login</h2>
-        <p class="text-secondary-foreground">Enter your identifier to start</p>
+        <p class="text-muted-foreground text-sm">Enter your identifier to start</p>
         <Input v-model="identifier" placeholder="Enter your id" />
-        <Button size="sm" @click="handleLogin">Login</Button>
+        <Button size="sm" @click="handleLogin">Sign in with username</Button>
       </div>
     </div>
   </div>

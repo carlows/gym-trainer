@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { Header } from '@/components/layout'
+import { Button } from '@/components/ui/button'
 import { LayoutDashboard, MessageSquare } from 'lucide-vue-next'
 import { useAuth } from '@/composables/useAuth'
 
