@@ -20,7 +20,7 @@ const handleLogin = () => {
   <div class="flex flex-row h-screen">
     <div class="flex flex-col justify-between flex-1 bg-secondary p-10">
       <h2 class="text-lg font-semibold tracking-tight">Gym Trainer</h2>
-      <p>"No pain no gain."</p>
+      <p>"It never gets easier, you just get stronger"</p>
     </div>
     <div class="flex justify-center items-center flex-1 bg-background p-10">
       <div class="w-sm flex flex-col gap-4 text-center">
