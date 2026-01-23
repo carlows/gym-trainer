@@ -3,9 +3,16 @@ import { useQuery } from '@tanstack/vue-query'
 import Routine from './Routine.vue'
 import type { Routine as RoutineType } from '@/types/routine'
 import { Loader2 } from 'lucide-vue-next'
+import { useAuth } from '@/composables/useAuth'
+
+const { userIdentifier } = useAuth()
 
 const fetchRoutines = async (): Promise<RoutineType[]> => {
-  const response = await fetch('http://localhost:3000/api/v1/routines')
+  const response = await fetch('http://localhost:3000/api/v1/routines', {
+    headers: {
+      'X-User-Identifier': userIdentifier.value || '',
+    },
+  })
   if (!response.ok) {
     throw new Error('Network response was not ok')
   }
